@@ -12,6 +12,9 @@ from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
 
+from .tasks import test_function, add_num
+
+
 class CustomNumberPagination(PageNumberPagination):
     page_size = 2
     page_size_query_param = 'page_size'
@@ -19,6 +22,9 @@ class CustomNumberPagination(PageNumberPagination):
 
 @api_view(['GET', 'POST'])
 def item_list_create(request):
+    test_function.delay()
+    add_num.apply_async(args=[4, 2])
+    # add_num.delay(4, 5)
     if request.method == 'GET':
         items = ItemModel.objects.all()
         serializer = ItemSerializer(items, many=True)
@@ -35,6 +41,7 @@ def item_list_create(request):
 
 
 class ItemView(generics.ListCreateAPIView):
+
     queryset = ItemModel.objects.all()
     serializer_class = ItemSerializer
     permission_classes = (IsAuthenticated,)
@@ -70,6 +77,7 @@ class ItemReveiwView(generics.ListCreateAPIView):
 
 
 class SingleItemCreateView(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = ItemReveiw.objects.all()
     serializer_class = ItemReveiwSerializer
 

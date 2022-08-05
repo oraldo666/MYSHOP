@@ -53,7 +53,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'accounts',
-    'shopitems'
+    'shopitems',
+
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [
@@ -245,3 +247,14 @@ MEDIA_ROOT = 'media/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# CELERY SETTINGS
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+accept_content = ['application/json']
+result_serializer = 'json'
+task_serializer = 'json'
+timezone = "Europe/Berlin"
+
+result_backend = 'django-db'
